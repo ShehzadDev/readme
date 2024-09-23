@@ -45,11 +45,11 @@ $ cd traininglab-part2
    $ gdb ./bug
    ```
 ```bash
-   (gdb) set logging on
-   (gdb) set logging file bug_prints
-   (gdb) set logging overwrite on
-   Enter TUI mode with `Ctrl-x` followed by `1`.
+   (gdb) set logging file bug_prints  # Set the desired output file name.
+   (gdb) set logging on  # Enable logging to the specified file.
 ```
+   Enter TUI mode with `Ctrl-x` followed by `1`.
+
 7. Run the program without arguments:
 
    - Hit `Ctrl-l` to refresh the display.
