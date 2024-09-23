@@ -1,129 +1,135 @@
-#################################################################### -*- org -*-
-                      WELCOME TO THE TRAINING LAB: GDB & C!
-################################################################################
+# WELCOME TO THE TRAINING LAB: GDB & C!
 
-To read these instructions and work at the same time, I recommend you start
-multiple SSH sessions (start PuTTy multiple times, or open several terminals).
-One session can look at this file in emacs, and you can put an X in each box [ ]
-to help you keep track of your progress.
+To read these instructions and work at the same time, consider starting multiple SSH sessions. One session can view this file, while another can execute commands.
 
-* Extract the files needed for the lab
+## Extract the files needed for the lab
 
+```bash
 $ cd ~/
 $ tar xvf ~prof/traininglab-part2-handout.tar.bz2
 $ cd traininglab-part2
+```
 
-* Part 1: GDB
+## Part 1: GDB
 
-Go to ~/traininglab-part2.  All the files you are going to produce will be in that
-folder.  It will be useful to open two sessions to our server to complete this
-part: one to execute commands, one to write the answer files.
+1. Go to `~/traininglab-part2`. Open two sessions: one for executing commands, another for writing answer files.
 
-- [ ]  Compile bug.c with debug symbol (-g), activating all warnings (-Wall):
+2. Compile `bug.c` with debug symbols and warnings:
 
-     $ gcc -g -Wall bug.c -o bug
+   ```bash
+   $ gcc -g -Wall bug.c -o bug
+   ```
 
-- [ ]  Run
+3. Run the program and store its output:
 
-     $ ./bug 8 lorem ipsum dolor
+   ```bash
+   $ ./bug 8 lorem ipsum dolor > bug_output
+   ```
 
-  and store its output in the file "bug_output".  Recall the use of ">" from
-  last week to redirect the output of a program to a file.
+4. Read the man page of `strtoul` and change its call in `bug.c` to read numbers in hexadecimal (base 16). Recompile:
 
-- [ ]  Read the man page of strtoul (man strtoul) to understand what it does,
-  and change the call to strtoul in bug.c so that it reads numbers in
-  hexadecimal (base 16).  Recompile with:
+   ```bash
+   $ gcc -Wall -g bug.c -o bug
+   ```
 
-     $ gcc -Wall -g bug.c -o bug
+5. Run the program with two different inputs and store the outputs:
 
-- [ ]  Run
+   ```bash
+   $ ./bug > bug_output2
+   $ ./bug 0xB arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9 arg10 arg11 >> bug_output2
+   ```
 
-     $ ./bug
+6. Start GDB:
 
-   and
+   ```bash
+   $ gdb ./bug
+   ```
 
-   $ ./bug 0xB arg1 arg2 arg3 arg4 arg5 arg6 arg7 arg8 arg9 arg10 arg11
+   Enter TUI mode with `Ctrl-x` followed by `1`.
 
-  and store the two outputs in the file "bug_output2"
+7. Run the program without arguments:
 
-- [ ]  Run
+   - Hit `Ctrl-l` to refresh the display.
+   - Set a breakpoint on line 13:
 
-     $ gdb ./bug
+     ```
+     (gdb) b bug.c:13
+     ```
 
-   Enter the Text User Interface (TUI) by typing Control-x followed by 1.
-   This displays the code of the main, and waits for the program to be run.
+8. Use `help b` to get documentation on the breakpoint command and write the findings in `bug_doc`.
 
-   Run the program (command `r' followed by Enter).  This runs the program
-   with no arguments (as if you had run ./bug).
+9. Run the program with arguments:
 
-- [ ]  Hit Ctrl-l to refresh the display, that is now garbled by the output of
-  the program.
+   ```
+   (gdb) r 8 lorem ipsum dolor
+   ```
 
-- [ ]  Put a breakpoint on line 13 (command `b bug.c:13' followed by Enter).
+10. Print the values of the pointers:
 
-- [ ] The breakpoint command "b" can take, as argument, a location as a line
-  number or a function name.  The command has many more options.  Use "help b"
-  to get instant documentation on the command "b".  Read the documentation and
-  write in the file "bug_doc" what happens when no location is provided.
+    ```
+    (gdb) p argv
+    (gdb) p argv[0]
+    (gdb) p argv[8]
+    ```
 
-- [ ]  Now run the program in GDB with some arguments, using, in GDB:
+    Write these values in `bug_prints`.
 
-        (gdb) r 8 lorem ipsum dolor
+11. Execute one more line of code using `n`.
 
-      This provides 4 arguments to our executable: 8 lorem ipsum dolor.
+12. Print the following:
 
-- [ ]  When the program breaks, print the value of the pointers:
-     - argv
-     - argv[0]
-     - argv[8]
-     and write these values in a file "bug_prints".
+    - Value of `idx` in hexadecimal: 
 
-     Use command `p argv', for instance, to print a value.  Note that all of
-  them are pointers (memory addresses), but that GDB smartly tries to display
-  objects of type char* (i.e., pointer to a byte), such as argv[0], as strings.
-  It does so by fetching the bytes at the address, then the next, the next,
-  and so on, until reaching a 0 byte (or reaching 200 nonzero bytes).
+      ```
+      (gdb) p/x idx
+      ```
 
-- [ ]  Execute one more line of code using "n" followed by Enter.
+    - First byte of `argv[0]`:
 
-- [ ]  Now print:
-  - the value of idx that was just computed; print it in hexadecimal using
-    command `p/x idx' (the /x indicates hexadecimal).
-  - the first byte of argv[0] (using `p/x **argv', or `p/x *argv[0]', or
-    `p/x argv[0][0]', which are all the same!).
-  - the address of argv (using `p &argv').  Since argv is a variable, it has
-    indeed an address!  This is independent from the fact that argv itself
-    contains an address (which is just an 8-byte value).
-  - the byte at address 0x42.  To do so, we want to tell GDB to see 0x42 (a
-    number) as a pointer to a byte; the syntax is the same as in C:
-     "(char*) 0x42".  We then want to look in memory at that address, so we
-     dereference it, using * as in C.  The final command is thus:
+      ```
+      (gdb) p/x *argv[0]
+      ```
 
-      (gdb) p *((char*) 0x42).
+    - Address of `argv`:
 
-  Add what GDB prints in each case to the file "bug_prints".
+      ```
+      (gdb) p &argv
+      ```
 
-- [ ]  Delete the breakpoint (d 1)
+    - Byte at address `0x42`:
 
-- [ ]  Re run with command `r 9999999 arg1'.
+      ```
+      (gdb) p *((char*) 0x42)
+      ```
 
-- [ ]  GDB shows an error message; copy/paste it to file "bug_error", and add to
-  that file ONE sentence explaining what caused this error in the code.
+    Add the results to `bug_prints`.
 
-- [ ]  Exit GDB, and fix the file bug.c by printing an error message instead of
-  crashing.
+13. Delete the breakpoint:
 
-* Part 2: C
+    ```
+    (gdb) d 1
+    ```
 
-Read and complete the file strings.c, using GDB as needed to debug your program.
-*You should not modify the main function,* which runs a few tests and shows
-whether you obtained the correct values.  You are NOT allowed to call any
-external function.
+14. Rerun with:
 
-ANY discovered attempt at finding help online will result in an immediate
-failing grade for the whole class.  Use our Discord server, emails, office
-hours, when you need help; I'm here for that.
+    ```
+    (gdb) r 9999999 arg1
+    ```
 
-You must compile using:
+    Copy/paste the error message to `bug_error` and explain the cause.
 
-  $ gcc -Wall -Werror -g strings.c -o ./strings
+15. Exit GDB and fix `bug.c` to print an error message instead of crashing.
+
+## Part 2: C
+
+Read and complete `strings.c`, using GDB as needed for debugging. Do not modify the main function. You are NOT allowed to call any external functions.
+
+Compile using:
+
+```bash
+$ gcc -Wall -Werror -g strings.c -o ./strings
+```
+
+--- 
+
+Feel free to ask if you need any more adjustments!
