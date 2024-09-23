@@ -8,25 +8,25 @@ This document serves as a comprehensive manual for the GDB & C Training Lab, det
 
 ### Part 1: Debugging `bug.c` with GDB
 
-1. **Initial Compilation and Testing:**
+1. **Initial Compilation and Testing:** ✅
    - Compiled `bug.c` with debugging symbols (`-g`) and all warnings enabled (`-Wall`).
    - Tested the program with various inputs to identify errors in the index processing logic.
 
-2. **Understanding and Modifying `strtoul`:**
+2. **Understanding and Modifying `strtoul`:** ✅
    - Analyzed the `strtoul` function using its manual page (`man strtoul`).
    - Updated the `strtoul` call to interpret the index as a hexadecimal number (base 16).
 
-3. **Using GDB to Debug and Inspect Values:**
+3. **Using GDB to Debug and Inspect Values:** ✅
    - Set breakpoints and used GDB commands to inspect variable values, including pointers and memory addresses.
    - Executed commands to print the `argv` array, individual arguments, and hexadecimal representations.
    - Identified and documented the issue causing the program to crash with large indices.
 
-4. **Error Handling Improvement:**
+4. **Error Handling Improvement:** ✅
    - Modified the program to handle out-of-bounds index values gracefully by printing an error message instead of crashing.
 
 ### Part 2: Implementing String Functions in `strings.c`
 
-1. **Function Implementations:**
+1. **Function Implementations:** ✅
    - Implemented custom versions of common string functions without using any external library functions. These include:
      - `my_strlen`: Calculates the length of a string.
      - `my_strcmp`: Compares two strings.
@@ -34,7 +34,7 @@ This document serves as a comprehensive manual for the GDB & C Training Lab, det
      - `my_strrchr`: Locates the last occurrence of a character in a string.
      - `my_strrepl`: Replaces occurrences of a character in a string with another character.
 
-2. **Ensured Correctness:**
+2. **Ensured Correctness:** ✅
    - Used GDB to debug and verify the correctness of each function, ensuring they produce the expected outputs as defined in the `main` function of `strings.c`.
 
 ## 2. Testing Instructions
@@ -43,29 +43,31 @@ To validate the functionality of the implemented solutions, follow these steps:
 
 ### Part 1: Testing `bug.c`
 
-1. **Compile the `bug.c` File:**
+1. **Compile the `bug.c` File:** ✅
    ```bash
    gcc -g -Wall bug.c -o bug
    ```
 
-2. **Test the Program with Various Inputs:**
+2. **Test the Program with Various Inputs:** ✅
    - **With a Valid Index:**
      ```bash
      ./bug 2 lorem ipsum dolor
      ```
-     - Expected Output: 
+     - **Expected Output:**
      ```
      This is argument 2: lorem
      ```
-   
+
    - **With an Out-of-Bounds Index:**
      ```bash
      ./bug 9999999 arg1
      ```
-     - Expected Output: An error message indicating an invalid index.
-     - Error: Index 9999999 is out of bounds. Maximum index allowed is 2.
+     - **Expected Output:**
+     ```
+     Index 9999999 is out of bounds. Maximum index allowed is 2.
+     ```
 
-3. **Debug the Program using GDB:**
+3. **Debug the Program using GDB:** ✅
    - Start GDB:
      ```bash
      gdb ./bug
@@ -81,28 +83,31 @@ To validate the functionality of the implemented solutions, follow these steps:
      (gdb) p argv[0]
      (gdb) p/x idx
      ```
-   - Verify that the printed values match expected values as documented.
+   - **Expected Values:**
+     - `argv` should point to the correct memory addresses.
+     - `argv[0]` should equal "lorem".
+     - `idx` should correspond to the expected value based on input.
 
 ### Part 2: Testing `strings.c`
 
-1. **Compile the `strings.c` File:**
+1. **Compile the `strings.c` File:** ✅
    ```bash
    gcc -Wall -Werror -g strings.c -o ./strings
    ```
 
-2. **Run the Program and Check Outputs:**
+2. **Run the Program and Check Outputs:** ✅
    - The main function of `strings.c` will automatically run several tests and output whether the implemented functions are correct.
 
-3. **Verify Each Function Manually:**
+3. **Verify Each Function Manually:** ✅
    - For each implemented function, manually verify correctness by calling the function with different inputs and comparing the outputs to expected results.
 
-   - Example:
+   - **Example:**
      ```c
      int len = my_strlen("Hello, World!");
      printf("Length: %d\n", len); // Should print: Length: 13
      ```
 
-4. **Debug with GDB (Optional):**
+4. **Debug with GDB (Optional):** ✅
    - Use GDB to set breakpoints inside each function to step through and verify their behavior:
      ```bash
      gdb ./strings
@@ -112,18 +117,16 @@ To validate the functionality of the implemented solutions, follow these steps:
 
 ### Additional Commands to Verify Symbol Information
 
-1. **Compile the `strings.c` File with Optimization and Remove `main`:**
+1. **Compile the `strings.c` File with Optimization and Remove `main`:** ✅
    ```bash
    gcc -Dmain='static xmain [[ maybe_unused ]]' strings.c -O3 -c
    ```
 
-2. **Check Symbol Information Using `readelf`:**
+2. **Check Symbol Information Using `readelf`:** ✅
    ```bash
    readelf --syms strings.o -W
    ```
-   This command lists all the symbols in the `strings.o` object file. Symbols marked as `UND` (undefined) indicate external dependencies, which should not be present if no external functions were used.
-
-3. **Expected Symbol Table Output:**
+   - **Expected Symbol Table Output:**
    ```
    Symbol table '.symtab' contains 11 entries:
       Num:    Value          Size Type    Bind   Vis      Ndx Name
@@ -161,4 +164,3 @@ To validate the functionality of the implemented solutions, follow these steps:
 
 4. **Object File:**
    - `strings.o`: Compiled object file without `main` for symbol verification.
-
