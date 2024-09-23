@@ -130,6 +130,3 @@ Compile using:
 $ gcc -Wall -Werror -g strings.c -o ./strings
 ```
 
---- 
-
-Feel free to ask if you need any more adjustments!
