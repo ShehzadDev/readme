@@ -145,22 +145,3 @@ To validate the functionality of the implemented solutions, follow these steps:
 
    **Note:** The entries for `getenv` and `strlen` should not be present in the final symbol table if all external function calls have been successfully removed.
 
-## 3. Deliverables
-
-1. **Source Files:**
-   - `bug.c`: Original buggy program with improvements for error handling.
-   - `strings.c`: Contains all the implemented string functions.
-
-2. **Documentation Files:**
-   - `bug_output`: Output of `bug.c` with initial testing.
-   - `bug_output2`: Output of `bug.c` after modifying `strtoul`.
-   - `bug_prints`: Outputs of various GDB commands.
-   - `bug_error`: Error message with explanation for out-of-bounds index handling.
-   - `bug_doc`: Documentation for the `b` command in GDB.
-
-3. **Compiled Executables:**
-   - `bug`: Executable for the `bug.c` file.
-   - `strings`: Executable for the `strings.c` file.
-
-4. **Object File:**
-   - `strings.o`: Compiled object file without `main` for symbol verification.
