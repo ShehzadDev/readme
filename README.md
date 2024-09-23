@@ -55,7 +55,7 @@ To validate the functionality of the implemented solutions, follow these steps:
      ```
      - Expected Output: 
      ```
-     This is argument: ipsum
+     This is argument 2: lorem
      ```
    
    - **With an Out-of-Bounds Index:**
@@ -63,6 +63,7 @@ To validate the functionality of the implemented solutions, follow these steps:
      ./bug 9999999 arg1
      ```
      - Expected Output: An error message indicating an invalid index.
+     - Error: Index 9999999 is out of bounds. Maximum index allowed is 2.
 
 3. **Debug the Program using GDB:**
    - Start GDB:
